@@ -28,17 +28,7 @@ jobs:
         run: python create_icon.py
 
       - name: Build exe with PyInstaller
-        run: |
-          pyinstaller --noconfirm `
-            --onefile `
-            --windowed `
-            --name "MyPcNow" `
-            --icon "assets\icon.ico" `
-            --add-data "src\cleaners;cleaners" `
-            --hidden-import "customtkinter" `
-            --hidden-import "PIL" `
-            --collect-all "customtkinter" `
-            src\app.py
+        run: pyinstaller --noconfirm mypcnow.spec
 
       - name: Verify build
         run: |

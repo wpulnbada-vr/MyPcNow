@@ -1,11 +1,11 @@
-; mypcnow Inno Setup Installer Script
+; MyPcNow Inno Setup Installer Script
 ; Requires Inno Setup 6+
 
-#define MyAppName "mypcnow"
+#define MyAppName "MyPcNow"
 #define MyAppVersion "1.0.0"
-#define MyAppPublisher "mypcnow"
-#define MyAppURL "https://github.com/mypcnow"
-#define MyAppExeName "mypcnow.exe"
+#define MyAppPublisher "MyPcNow"
+#define MyAppURL "https://github.com/MyPcNow"
+#define MyAppExeName "MyPcNow.exe"
 
 [Setup]
 AppId={{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}
@@ -17,7 +17,7 @@ DefaultDirName={autopf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputDir=..\dist\installer
-OutputBaseFilename=mypcnow_setup_v{#MyAppVersion}
+OutputBaseFilename=MyPcNow_setup_v{#MyAppVersion}
 SetupIconFile=..\assets\icon.ico
 Compression=lzma2/ultra64
 SolidCompression=yes
@@ -40,7 +40,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Name: "quicklaunchicon"; Description: "빠른 실행에 추가"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\dist\mypcnow.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\dist\MyPcNow.exe"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

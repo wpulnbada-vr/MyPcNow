@@ -1,5 +1,5 @@
 """
-mypcnow - Windows 11 Privacy Cleaner
+MyPcNow - Windows 11 Privacy Cleaner
 Main application with CustomTkinter GUI.
 """
 
@@ -22,7 +22,7 @@ from cleaners import CLEANER_CATEGORIES
 class MyPCNow(ctk.CTk):
     """Main application window."""
 
-    APP_NAME = "mypcnow"
+    APP_NAME = "MyPcNow"
     APP_VERSION = "1.0.0"
     WINDOW_WIDTH = 700
     WINDOW_HEIGHT = 750
@@ -67,7 +67,7 @@ class MyPCNow(ctk.CTk):
 
         title_label = ctk.CTkLabel(
             header,
-            text=f"mypcnow",
+            text=f"MyPcNow",
             font=ctk.CTkFont(size=28, weight="bold"),
         )
         title_label.grid(row=0, column=0, sticky="w")
@@ -281,7 +281,7 @@ class MyPCNow(ctk.CTk):
     def _run_cleaning(self, selected_items):
         """Run cleaning in background thread."""
         start_time = time.time()
-        self._log(f"=== mypcnow 정리 시작 ({len(selected_items)}개 항목) ===\n")
+        self._log(f"=== MyPcNow 정리 시작 ({len(selected_items)}개 항목) ===\n")
 
         # Group selected items by category
         items_by_category = {}

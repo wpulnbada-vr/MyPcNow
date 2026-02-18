@@ -57,9 +57,9 @@ class DesktopCleaner:
         """Create and return a timestamped recovery directory."""
         temp = _safe_env_path("TEMP", "TMP")
         if not temp:
-            temp = os.path.join(os.path.expanduser("~"), ".mypcnow_recovery")
+            temp = os.path.join(os.path.expanduser("~"), ".MyPcNow_recovery")
         ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        recovery = os.path.join(temp, "mypcnow_deleted_shortcuts", ts)
+        recovery = os.path.join(temp, "MyPcNow_deleted_shortcuts", ts)
         os.makedirs(recovery, exist_ok=True)
         return recovery
 

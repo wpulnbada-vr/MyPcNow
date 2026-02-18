@@ -1,5 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-# mypcnow PyInstaller spec file
+# MyPcNow PyInstaller spec file
 
 import os
 import customtkinter
@@ -33,7 +33,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='mypcnow',
+    name='MyPcNow',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

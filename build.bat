@@ -1,6 +1,6 @@
 @echo off
 echo ============================================
-echo   mypcnow - Build Script
+echo   MyPcNow - Build Script
 echo ============================================
 echo.
 
@@ -21,7 +21,7 @@ echo [2/3] Building executable...
 pyinstaller --noconfirm ^
     --onefile ^
     --windowed ^
-    --name "mypcnow" ^
+    --name "MyPcNow" ^
     --icon "assets\icon.ico" ^
     --add-data "src\cleaners;cleaners" ^
     --hidden-import "customtkinter" ^
@@ -31,7 +31,7 @@ pyinstaller --noconfirm ^
 
 echo [3/3] Build complete!
 echo.
-echo Executable: dist\mypcnow.exe
+echo Executable: dist\MyPcNow.exe
 echo.
 
 REM Check if Inno Setup is available

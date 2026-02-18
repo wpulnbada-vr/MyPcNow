@@ -1,4 +1,4 @@
-"""mypcnow cleaners - Windows 11 Privacy Cleanup Modules"""
+"""MyPcNow cleaners - Windows 11 Privacy Cleanup Modules"""
 
 from .browser import BrowserCleaner
 from .windows_activity import WindowsActivityCleaner

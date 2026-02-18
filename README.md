@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="assets/icon.ico" width="80" alt="mypcnow logo"/>
+  <img src="assets/icon.ico" width="80" alt="MyPcNow logo"/>
 </p>
 
-<h1 align="center">mypcnow</h1>
+<h1 align="center">MyPcNow</h1>
 
 <p align="center">
   <strong>클릭 한 번으로 PC 흔적을 깨끗하게.</strong><br/>
@@ -18,11 +18,11 @@
 
 ---
 
-## 왜 mypcnow인가?
+## 왜 MyPcNow인가?
 
 누군가 내 PC를 잠깐 쓸 때, 검색 기록이나 최근 파일 목록이 신경 쓰인 적 있나요?
 
-**mypcnow**는 브라우저 기록, 검색 흔적, 최근 파일, 바탕화면 바로가기까지 — 선택한 항목만 골라서 한 번에 정리합니다. 설치된 프로그램은 절대 건드리지 않습니다.
+**MyPcNow**는 브라우저 기록, 검색 흔적, 최근 파일, 바탕화면 바로가기까지 — 선택한 항목만 골라서 한 번에 정리합니다. 설치된 프로그램은 절대 건드리지 않습니다.
 
 ## 주요 기능
 
@@ -48,12 +48,12 @@
 ## 빠른 시작
 
 ### 설치 프로그램 사용 (권장)
-[Releases](https://github.com/wpulnbada-vr/mypcnow/releases)에서 `mypcnow_setup.exe`를 다운로드하고 실행하세요.
+[Releases](https://github.com/wpulnbada-vr/MyPcNow/releases)에서 `MyPcNow_setup.exe`를 다운로드하고 실행하세요.
 
 ### 직접 빌드
 ```batch
-git clone https://github.com/wpulnbada-vr/mypcnow.git
-cd mypcnow
+git clone https://github.com/wpulnbada-vr/MyPcNow.git
+cd MyPcNow
 pip install -r requirements.txt
 python create_icon.py
 build.bat
@@ -77,7 +77,7 @@ build.bat
 ## 프로젝트 구조
 
 ```
-mypcnow/
+MyPcNow/
 ├── src/
 │   ├── app.py                      # GUI 애플리케이션
 │   └── cleaners/                   # 정리 모듈
@@ -102,5 +102,5 @@ mypcnow/
 ---
 
 <p align="center">
-  <sub>mypcnow — 내 PC는 지금부터 깨끗하게</sub>
+  <sub>MyPcNow — 내 PC는 지금부터 깨끗하게</sub>
 </p>

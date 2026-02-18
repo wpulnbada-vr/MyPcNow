@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/platform-Windows%2011-0078D6?logo=windows11" alt="Windows 11"/>
   <img src="https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white" alt="Python 3.11+"/>
   <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"/>
-  <img src="https://img.shields.io/badge/version-1.0.0-blue" alt="v1.0.0"/>
+  <img src="https://img.shields.io/badge/version-1.0.1-blue" alt="v1.0.1"/>
 </p>
 
 ---
@@ -61,7 +61,7 @@ build.bat
 
 빌드 결과물:
 - `dist\MyPcNow.exe` — 단일 실행 파일
-- `dist\installer\MyPcNow_setup_v1.0.0.exe` — 설치 프로그램 ([Inno Setup 6](https://jrsoftware.org/isdl.php) 필요)
+- `dist\installer\MyPcNow_setup_v1.0.1.exe` — 설치 프로그램 ([Inno Setup 6](https://jrsoftware.org/isdl.php) 필요)
 
 ### 요구사항
 - Windows 11

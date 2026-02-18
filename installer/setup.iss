@@ -2,7 +2,7 @@
 ; Requires Inno Setup 6+
 
 #define MyAppName "MyPcNow"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "MyPcNow"
 #define MyAppURL "https://github.com/MyPcNow"
 #define MyAppExeName "MyPcNow.exe"

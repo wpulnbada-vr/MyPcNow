@@ -23,7 +23,7 @@ class MyPCNow(ctk.CTk):
     """Main application window."""
 
     APP_NAME = "MyPcNow"
-    APP_VERSION = "1.0.0"
+    APP_VERSION = "1.0.1"
     WINDOW_WIDTH = 700
     WINDOW_HEIGHT = 750
 

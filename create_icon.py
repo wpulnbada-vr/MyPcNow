@@ -1,10 +1,10 @@
-"""Generate a simple app icon for mypcnow."""
+"""Generate a simple app icon for MyPcNow."""
 
 from PIL import Image, ImageDraw, ImageFont
 import os
 
 def create_icon():
-    """Create a simple shield icon for mypcnow."""
+    """Create a simple shield icon for MyPcNow."""
     size = 256
     img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)

@@ -60,8 +60,8 @@ build.bat
 ```
 
 빌드 결과물:
-- `dist\mypcnow.exe` — 단일 실행 파일
-- `dist\installer\mypcnow_setup_v1.0.0.exe` — 설치 프로그램 ([Inno Setup 6](https://jrsoftware.org/isdl.php) 필요)
+- `dist\MyPcNow.exe` — 단일 실행 파일
+- `dist\installer\MyPcNow_setup_v1.0.0.exe` — 설치 프로그램 ([Inno Setup 6](https://jrsoftware.org/isdl.php) 필요)
 
 ### 요구사항
 - Windows 11

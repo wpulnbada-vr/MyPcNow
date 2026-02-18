@@ -1,5 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
-# MyPcNow PyInstaller spec file
+# MyPcNow v1.1.0 PyInstaller spec file
+# Builds a single-file Windows exe with admin privileges
 
 import os
 import customtkinter
@@ -20,9 +21,13 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=[
+        'unittest', 'test', 'tests',
+        'numpy', 'pandas', 'scipy', 'matplotlib',
+        'email', 'html', 'http', 'xmlrpc', 'pydoc',
+    ],
     noarchive=False,
-    optimize=0,
+    optimize=1,
 )
 
 pyz = PYZ(a.pure)

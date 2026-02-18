@@ -13,7 +13,7 @@
   <img src="https://img.shields.io/badge/platform-Windows%2011-0078D6?logo=windows11" alt="Windows 11"/>
   <img src="https://img.shields.io/badge/python-3.11+-3776AB?logo=python&logoColor=white" alt="Python 3.11+"/>
   <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License"/>
-  <img src="https://img.shields.io/badge/version-1.0.1-blue" alt="v1.0.1"/>
+  <img src="https://img.shields.io/badge/version-1.1.0-blue" alt="v1.1.0"/>
 </p>
 
 ---
@@ -43,7 +43,8 @@
 - **복구 가능한 삭제** — 바탕화면 바로가기는 임시 폴더로 이동 (영구 삭제 아님)
 - **사용 중 파일 건너뜀** — PermissionError 자동 처리
 - **SQL Injection 방지** — 테이블명 allowlist 검증
-- **관리자 권한 사전 체크** — 권한 필요 작업은 미리 확인 후 안내
+- **관리자 권한 자동 요청** — 실행 시 UAC를 통해 자동으로 관리자 권한 획득
+- **삭제 전 확인** — 정리 시작 전 확인 다이얼로그로 실수 방지
 
 ## 빠른 시작
 
@@ -61,7 +62,7 @@ build.bat
 
 빌드 결과물:
 - `dist\MyPcNow.exe` — 단일 실행 파일
-- `dist\installer\MyPcNow_setup_v1.0.1.exe` — 설치 프로그램 ([Inno Setup 6](https://jrsoftware.org/isdl.php) 필요)
+- `dist\installer\MyPcNow_setup_v1.1.0.exe` — 설치 프로그램 ([Inno Setup 6](https://jrsoftware.org/isdl.php) 필요)
 
 ### 요구사항
 - Windows 11

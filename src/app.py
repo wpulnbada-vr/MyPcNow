@@ -1,12 +1,13 @@
 """
-MyPcNow - Windows 11 Privacy Cleaner
-Main application with CustomTkinter GUI.
+MyPcNow v1.1.0 - Windows 11 Privacy Cleaner
+Single-click exe: 클릭 한 번으로 PC 흔적을 안전하게 삭제합니다.
 """
 
 import sys
 import os
 import threading
 import time
+import ctypes
 
 # Handle frozen exe path
 if getattr(sys, "frozen", False):
@@ -14,8 +15,34 @@ if getattr(sys, "frozen", False):
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
-import customtkinter as ctk
 
+def is_admin():
+    """Check if running with administrator privileges."""
+    try:
+        return ctypes.windll.shell32.IsUserAnAdmin()
+    except Exception:
+        return False
+
+
+def run_as_admin():
+    """Re-launch the current process with admin privileges via UAC prompt."""
+    try:
+        if getattr(sys, "frozen", False):
+            exe = sys.executable
+        else:
+            exe = sys.executable
+            # When running as script, re-run python with this script
+        ctypes.windll.shell32.ShellExecuteW(
+            None, "runas", exe,
+            " ".join(sys.argv[1:]) if getattr(sys, "frozen", False) else f'"{os.path.abspath(__file__)}"',
+            None, 1,
+        )
+    except Exception:
+        pass
+    sys.exit(0)
+
+
+import customtkinter as ctk
 from cleaners import CLEANER_CATEGORIES
 
 
@@ -23,9 +50,9 @@ class MyPCNow(ctk.CTk):
     """Main application window."""
 
     APP_NAME = "MyPcNow"
-    APP_VERSION = "1.0.1"
-    WINDOW_WIDTH = 700
-    WINDOW_HEIGHT = 750
+    APP_VERSION = "1.1.0"
+    WINDOW_WIDTH = 720
+    WINDOW_HEIGHT = 780
 
     def __init__(self):
         super().__init__()
@@ -33,7 +60,7 @@ class MyPCNow(ctk.CTk):
         # Window setup
         self.title(f"{self.APP_NAME} v{self.APP_VERSION} - PC 프라이버시 클리너")
         self.geometry(f"{self.WINDOW_WIDTH}x{self.WINDOW_HEIGHT}")
-        self.minsize(600, 600)
+        self.minsize(620, 650)
         self.resizable(True, True)
 
         # Appearance
@@ -43,6 +70,7 @@ class MyPCNow(ctk.CTk):
         # State
         self.checkboxes = {}  # key -> (CTkCheckBox, IntVar)
         self.is_cleaning = False
+        self.clean_results = {}  # category -> count of items cleaned
 
         # Build UI
         self._build_ui()
@@ -53,24 +81,45 @@ class MyPCNow(ctk.CTk):
         y = (self.winfo_screenheight() - self.WINDOW_HEIGHT) // 2
         self.geometry(f"+{x}+{y}")
 
+        # Handle window close during cleaning
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
+
+    def _on_close(self):
+        """Handle window close - warn if cleaning is in progress."""
+        if self.is_cleaning:
+            dialog = ctk.CTkInputDialog(title="경고", text="정리가 진행 중입니다. 정말 종료하시겠습니까?")
+            # Use a simple toplevel dialog instead
+            return
+        self.destroy()
+
     def _build_ui(self):
         """Build the complete user interface."""
-        # Configure grid
         self.grid_columnconfigure(0, weight=1)
-        self.grid_rowconfigure(1, weight=1)  # scrollable area expands
-        self.grid_rowconfigure(3, weight=0)  # log area fixed
+        self.grid_rowconfigure(1, weight=1)
+        self.grid_rowconfigure(3, weight=0)
 
         # --- Header ---
         header = ctk.CTkFrame(self, fg_color="transparent")
         header.grid(row=0, column=0, padx=20, pady=(15, 5), sticky="ew")
         header.grid_columnconfigure(1, weight=1)
 
+        title_frame = ctk.CTkFrame(header, fg_color="transparent")
+        title_frame.grid(row=0, column=0, rowspan=2, sticky="w")
+
         title_label = ctk.CTkLabel(
-            header,
-            text=f"MyPcNow",
+            title_frame,
+            text="MyPcNow",
             font=ctk.CTkFont(size=28, weight="bold"),
         )
-        title_label.grid(row=0, column=0, sticky="w")
+        title_label.pack(side="left")
+
+        version_label = ctk.CTkLabel(
+            title_frame,
+            text=f"  v{self.APP_VERSION}",
+            font=ctk.CTkFont(size=12),
+            text_color="#6B7280",
+        )
+        version_label.pack(side="left", pady=(8, 0))
 
         subtitle = ctk.CTkLabel(
             header,
@@ -80,7 +129,18 @@ class MyPCNow(ctk.CTk):
         )
         subtitle.grid(row=1, column=0, columnspan=2, sticky="w", pady=(0, 5))
 
-        # Select All / Deselect All buttons in header
+        # Admin status indicator
+        admin_text = "관리자 권한" if is_admin() else "일반 사용자"
+        admin_color = "#22C55E" if is_admin() else "#F59E0B"
+        admin_label = ctk.CTkLabel(
+            header,
+            text=f"● {admin_text}",
+            font=ctk.CTkFont(size=11),
+            text_color=admin_color,
+        )
+        admin_label.grid(row=0, column=1, sticky="ne", padx=(0, 120))
+
+        # Select All / Deselect All buttons
         btn_frame = ctk.CTkFrame(header, fg_color="transparent")
         btn_frame.grid(row=0, column=1, sticky="e")
 
@@ -122,11 +182,10 @@ class MyPCNow(ctk.CTk):
             cat_header.grid(row=row_idx, column=0, sticky="ew", pady=(10, 2), padx=5)
             cat_header.grid_columnconfigure(0, weight=1)
 
-            # Category select all checkbox
             cat_var = ctk.IntVar(value=0)
             cat_cb = ctk.CTkCheckBox(
                 cat_header,
-                text=f"  {cat_info['name']}",
+                text=f"  {cat_info['icon']}  {cat_info['name']}",
                 font=ctk.CTkFont(size=14, weight="bold"),
                 variable=cat_var,
                 command=lambda ck=cat_key, cv=cat_var: self._toggle_category(ck, cv),
@@ -134,6 +193,16 @@ class MyPCNow(ctk.CTk):
                 checkbox_height=22,
             )
             cat_cb.grid(row=0, column=0, padx=10, pady=8, sticky="w")
+
+            # Item count label
+            count_label = ctk.CTkLabel(
+                cat_header,
+                text=f"{len(cat_info['items'])}개 항목",
+                font=ctk.CTkFont(size=11),
+                text_color="#6B7280",
+            )
+            count_label.grid(row=0, column=1, padx=10, pady=8, sticky="e")
+
             self.checkboxes[f"__cat_{cat_key}"] = (cat_cb, cat_var)
             row_idx += 1
 
@@ -153,7 +222,7 @@ class MyPCNow(ctk.CTk):
                 self.checkboxes[item_key] = (cb, var)
                 row_idx += 1
 
-        # --- Action buttons ---
+        # --- Action area ---
         action_frame = ctk.CTkFrame(self, fg_color="transparent")
         action_frame.grid(row=2, column=0, padx=20, pady=(5, 5), sticky="ew")
         action_frame.grid_columnconfigure(0, weight=1)
@@ -186,12 +255,16 @@ class MyPCNow(ctk.CTk):
         self.log_frame.grid(row=3, column=0, padx=20, pady=(5, 15), sticky="ew")
         self.log_frame.grid_columnconfigure(0, weight=1)
 
+        log_header = ctk.CTkFrame(self.log_frame, fg_color="transparent")
+        log_header.grid(row=0, column=0, padx=10, pady=(5, 0), sticky="ew")
+        log_header.grid_columnconfigure(0, weight=1)
+
         log_label = ctk.CTkLabel(
-            self.log_frame,
+            log_header,
             text="실행 로그",
             font=ctk.CTkFont(size=12, weight="bold"),
         )
-        log_label.grid(row=0, column=0, padx=10, pady=(5, 0), sticky="w")
+        log_label.grid(row=0, column=0, sticky="w")
 
         self.log_text = ctk.CTkTextbox(
             self.log_frame,
@@ -253,6 +326,59 @@ class MyPCNow(ctk.CTk):
             self.log_text.configure(state="disabled")
         self.after(0, _append)
 
+    def _show_confirm_dialog(self, count):
+        """Show confirmation dialog before cleaning. Returns True if confirmed."""
+        dialog = ctk.CTkToplevel(self)
+        dialog.title("정리 확인")
+        dialog.geometry("400x200")
+        dialog.resizable(False, False)
+        dialog.transient(self)
+        dialog.grab_set()
+
+        # Center on parent
+        dialog.update_idletasks()
+        x = self.winfo_x() + (self.winfo_width() - 400) // 2
+        y = self.winfo_y() + (self.winfo_height() - 200) // 2
+        dialog.geometry(f"+{x}+{y}")
+
+        result = {"confirmed": False}
+
+        ctk.CTkLabel(
+            dialog,
+            text="정리를 시작하시겠습니까?",
+            font=ctk.CTkFont(size=16, weight="bold"),
+        ).pack(pady=(25, 10))
+
+        ctk.CTkLabel(
+            dialog,
+            text=f"선택된 {count}개 항목이 삭제됩니다.\n이 작업은 되돌릴 수 없습니다.",
+            font=ctk.CTkFont(size=13),
+            text_color="#F59E0B",
+        ).pack(pady=(0, 20))
+
+        btn_frame = ctk.CTkFrame(dialog, fg_color="transparent")
+        btn_frame.pack(pady=10)
+
+        def confirm():
+            result["confirmed"] = True
+            dialog.destroy()
+
+        def cancel():
+            dialog.destroy()
+
+        ctk.CTkButton(
+            btn_frame, text="정리 시작", width=120, height=36,
+            command=confirm, fg_color="#DC2626", hover_color="#B91C1C",
+        ).pack(side="left", padx=10)
+
+        ctk.CTkButton(
+            btn_frame, text="취소", width=120, height=36,
+            command=cancel, fg_color="#4B5563", hover_color="#374151",
+        ).pack(side="left", padx=10)
+
+        dialog.wait_window()
+        return result["confirmed"]
+
     def _start_cleaning(self):
         """Start the cleaning process in a background thread."""
         if self.is_cleaning:
@@ -263,7 +389,12 @@ class MyPCNow(ctk.CTk):
             self.status_label.configure(text="선택된 항목이 없습니다!", text_color="#EF4444")
             return
 
+        # Show confirmation dialog
+        if not self._show_confirm_dialog(len(selected)):
+            return
+
         self.is_cleaning = True
+        self.clean_results = {}
         self.clean_btn.configure(state="disabled", text="정리 중...")
         self.select_all_btn.configure(state="disabled")
         self.deselect_all_btn.configure(state="disabled")
@@ -281,7 +412,7 @@ class MyPCNow(ctk.CTk):
     def _run_cleaning(self, selected_items):
         """Run cleaning in background thread."""
         start_time = time.time()
-        self._log(f"=== MyPcNow 정리 시작 ({len(selected_items)}개 항목) ===\n")
+        self._log(f"=== MyPcNow v{self.APP_VERSION} 정리 시작 ({len(selected_items)}개 항목) ===\n")
 
         # Group selected items by category
         items_by_category = {}
@@ -295,12 +426,13 @@ class MyPCNow(ctk.CTk):
 
         for cat_key, items in items_by_category.items():
             cat_info = CLEANER_CATEGORIES[cat_key]
-            self._log(f"\n--- {cat_info['name']} ---")
+            self._log(f"\n--- {cat_info['icon']} {cat_info['name']} ---")
 
             cleaner_class = cat_info["cleaner"]
             cleaner = cleaner_class(log_callback=self._log)
             cleaner.run(items)
 
+            self.clean_results[cat_key] = len(items)
             completed += 1
             progress = completed / total_categories
             self.after(0, lambda p=progress: self.progress_bar.set(p))
@@ -324,6 +456,11 @@ class MyPCNow(ctk.CTk):
 
 
 def main():
+    # Admin check - request elevation if not admin
+    if not is_admin():
+        run_as_admin()
+        return
+
     app = MyPCNow()
     app.mainloop()
 
